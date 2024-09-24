@@ -2,14 +2,15 @@
 FROM amazoncorretto:17-alpine as build
 WORKDIR /workspace/app
 
+# Install Maven in the build stage
+RUN apk add --no-cache maven
+
 # Copy the required files to build the application
-COPY mvnw .
-COPY .mvn/ .mvn/
 COPY pom.xml .
-RUN ./mvnw dependency:go-offline  # Cache dependencies first to speed up later builds
+RUN mvn dependency:go-offline  # Cache dependencies first to speed up later builds
 
 COPY src/ src/
-RUN ./mvnw package -DskipTests  # Build the JAR without tests
+RUN mvn package -DskipTests  # Build the JAR without running tests
 
 # Final Stage (Only copy the built JAR to the runtime image)
 FROM amazoncorretto:17-alpine
