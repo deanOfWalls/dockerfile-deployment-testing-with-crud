@@ -14,7 +14,6 @@ RUN ./mvnw package -DskipTests  # Build the JAR without tests
 # Final Stage (Only copy the built JAR to the runtime image)
 FROM amazoncorretto:17-alpine
 
-# Set the working directory in the runtime image
 WORKDIR /app
 
 # Copy the built JAR from the build stage
